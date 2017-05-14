@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+const _ = require('lodash')
+const fs = require('fs')
+const path = require('path')
+const program = require('commander')
+const chalk = require('chalk')
+const ora = require('ora')
+const home = require('user-home')
+const rimraf = require('rimraf')
+const tildify = require('tildify')
+const download = require('download-git-repo')
+
+const logger = require('../lib/logger')
+const generate = require('../lib/generate')
+const localPath = require('../lib/local-path')
+
+const isLocalPath = localPath.isLocalPath
+const getTemplatePath = localPath.getTemplatePath
+
+program
+  .usage('[project-path]')
+  .option('-c, --clone', '使用 git clone')
+  .option('--offline', '使用缓存模板')
+  .parse(process.argv)
+
+run()
+
+function run () {
+  const projectPath = program.args[0] ? path.resolve(process.cwd(), program.args[0]) : process.cwd()
+  const configPath = path.join(projectPath, '.easy-mock.js')
+
+  if (!fs.existsSync(configPath)) {
+    logger.fatal('找不到 ".easy-mock.js" 配置文件.')
+  }
+
+  const config = require(configPath)
+
+  let template = config.template || 'axios'
+  const hasSlash = template.indexOf('/') > -1
+  const tmp = path.join(home, '.easy-mock-templates', template.replace(/\//g, '-'))
+
+  if (program.offline) {
+    logger.log('> 使用缓存模板 %s', chalk.yellow(tildify(tmp)))
+    template = tmp
+  }
+
+  // check if template is local
+  if (isLocalPath(template)) {
+    const templatePath = getTemplatePath(template, projectPath)
+    if (fs.existsSync(templatePath)) {
+      generate(projectPath, templatePath, config, generateDone)
+    } else {
+      logger.fatal('找不到本地模板 "%s".', template)
+    }
+  } else {
+    if (!hasSlash) {
+      // use official templates
+      const officialTemplate = 'easy-mock-templates/' + template
+      downloadAndGenerate(officialTemplate, tmp, projectPath, config)
+    } else {
+      downloadAndGenerate(template, tmp, projectPath, config)
+    }
+  }
+}
+
+function downloadAndGenerate (template, tmp, projectPath, config) {
+  const spinner = ora('正在下载模板.')
+  spinner.start()
+  // Remove if local template exists
+  if (fs.existsSync(tmp)) rimraf.sync(tmp)
+  download(template, tmp, {
+    clone: program.clone || false
+  }, function (err) {
+    spinner.stop()
+    if (err) logger.fatal('模板下载失败 ' + template + ': ' + err.message.trim())
+    generate(projectPath, tmp, config, generateDone)
+  })
+}
+
+function generateDone (error, files) {
+  if (error) logger.fatal(error)
+  _.forEach(files, (file) => {
+    logger.success('"%s" 创建成功.', chalk.yellow(tildify(file)))
+  })
+}

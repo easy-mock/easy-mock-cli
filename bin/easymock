@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+require('commander')
+  .version(require('../package').version)
+  .usage('<command> [options]')
+  .command('init', '根据 ".easy-mock.js" 创建接口模板')
+  .command('list', '列出官方模板')
+  .parse(process.argv)

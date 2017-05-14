@@ -1,0 +1,43 @@
+{
+  "name": "easy-mock-cli",
+  "version": "0.1.2",
+  "main": "index.js",
+  "license": "MIT",
+  "author": "Chuangker",
+  "description": "Create api.js for Easy-Mock.",
+  "bin": {
+    "easymock": "./bin/easymock",
+    "easymock-init": "./bin/easymock-init",
+    "easymock-list": "./bin/easymock-list"
+  },
+  "keywords": [
+    "easy-mock",
+    "mock",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/easy-mock/easy-mock-cli.git"
+  },
+  "dependencies": {
+    "axios": "^0.15.3",
+    "chalk": "^1.1.3",
+    "commander": "^2.9.0",
+    "download-git-repo": "^1.0.0",
+    "lodash": "^4.17.4",
+    "metalsmith": "^2.3.0",
+    "ora": "^1.2.0",
+    "rimraf": "^2.6.1",
+    "tildify": "^1.2.0",
+    "user-home": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
