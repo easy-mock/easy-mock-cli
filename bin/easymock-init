@@ -14,6 +14,7 @@ const download = require('download-git-repo')
 const logger = require('../lib/logger')
 const generate = require('../lib/generate')
 const localPath = require('../lib/local-path')
+const checkVersion = require('../lib/check-version')
 
 const isLocalPath = localPath.isLocalPath
 const getTemplatePath = localPath.getTemplatePath
@@ -54,13 +55,15 @@ function run () {
       logger.fatal('找不到本地模板 "%s".', template)
     }
   } else {
-    if (!hasSlash) {
-      // use official templates
-      const officialTemplate = 'easy-mock-templates/' + template
-      downloadAndGenerate(officialTemplate, tmp, projectPath, config)
-    } else {
-      downloadAndGenerate(template, tmp, projectPath, config)
-    }
+    checkVersion(() => {
+      if (!hasSlash) {
+        // use official templates
+        const officialTemplate = 'easy-mock-templates/' + template
+        downloadAndGenerate(officialTemplate, tmp, projectPath, config)
+      } else {
+        downloadAndGenerate(template, tmp, projectPath, config)
+      }
+    })
   }
 }
 
