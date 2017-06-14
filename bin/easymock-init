@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 
-const _ = require('lodash')
-const fs = require('fs')
-const path = require('path')
-const program = require('commander')
-const chalk = require('chalk')
-const ora = require('ora')
-const home = require('user-home')
-const rimraf = require('rimraf')
-const tildify = require('tildify')
-const download = require('download-git-repo')
+var _ = require('lodash')
+var fs = require('fs')
+var path = require('path')
+var program = require('commander')
+var chalk = require('chalk')
+var ora = require('ora')
+var home = require('user-home')
+var rimraf = require('rimraf')
+var tildify = require('tildify')
+var download = require('download-git-repo')
 
-const logger = require('../lib/logger')
-const generate = require('../lib/generate')
-const localPath = require('../lib/local-path')
-const checkVersion = require('../lib/check-version')
+var logger = require('../lib/logger')
+var generate = require('../lib/generate')
+var localPath = require('../lib/local-path')
+var checkVersion = require('../lib/check-version')
 
-const isLocalPath = localPath.isLocalPath
-const getTemplatePath = localPath.getTemplatePath
+var isLocalPath = localPath.isLocalPath
+var getTemplatePath = localPath.getTemplatePath
 
 program
   .usage('[project-path]')
@@ -28,18 +28,18 @@ program
 run()
 
 function run () {
-  const projectPath = program.args[0] ? path.resolve(process.cwd(), program.args[0]) : process.cwd()
-  const configPath = path.join(projectPath, '.easy-mock.js')
+  var projectPath = program.args[0] ? path.resolve(process.cwd(), program.args[0]) : process.cwd()
+  var configPath = path.join(projectPath, '.easy-mock.js')
 
   if (!fs.existsSync(configPath)) {
     logger.fatal('找不到 ".easy-mock.js" 配置文件.')
   }
 
-  const config = require(configPath)
+  var config = require(configPath)
 
-  let template = config.template || 'axios'
-  const hasSlash = template.indexOf('/') > -1
-  const tmp = path.join(home, '.easy-mock-templates', template.replace(/\//g, '-'))
+  var template = config.template || 'axios'
+  var hasSlash = template.indexOf('/') > -1
+  var tmp = path.join(home, '.easy-mock-templates', template.replace(/\//g, '-'))
 
   if (program.offline) {
     logger.log('> 使用缓存模板 %s', chalk.yellow(tildify(tmp)))
@@ -48,7 +48,7 @@ function run () {
 
   // check if template is local
   if (isLocalPath(template)) {
-    const templatePath = getTemplatePath(template, projectPath)
+    var templatePath = getTemplatePath(template, projectPath)
     if (fs.existsSync(templatePath)) {
       generate(projectPath, templatePath, config, generateDone)
     } else {
@@ -58,7 +58,7 @@ function run () {
     checkVersion(() => {
       if (!hasSlash) {
         // use official templates
-        const officialTemplate = 'easy-mock-templates/' + template
+        var officialTemplate = 'easy-mock-templates/' + template
         downloadAndGenerate(officialTemplate, tmp, projectPath, config)
       } else {
         downloadAndGenerate(template, tmp, projectPath, config)
@@ -68,7 +68,7 @@ function run () {
 }
 
 function downloadAndGenerate (template, tmp, projectPath, config) {
-  const spinner = ora('正在下载模板.')
+  var spinner = ora('正在下载模板.')
   spinner.start()
   // Remove if local template exists
   if (fs.existsSync(tmp)) rimraf.sync(tmp)

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-const logger = require('../lib/logger')
-const axios = require('axios')
-const chalk = require('chalk')
+var logger = require('../lib/logger')
+var axios = require('axios')
+var chalk = require('chalk')
 
 axios
   .get('https://api.github.com/users/easy-mock-templates/repos', {
@@ -11,7 +11,7 @@ axios
     }
   })
   .then((res) => {
-    const requestBody = res.data
+    var requestBody = res.data
     if (Array.isArray(res.data)) {
       console.log('  Available official templates:')
       console.log()
@@ -26,7 +26,7 @@ axios
     }
   })
   .catch((err) => {
-    const response = err.response
+    var response = err.response
     if (response) {
       logger.fatal(response.data.message)
     } else {

@@ -15,6 +15,11 @@
     "mock",
     "cli"
   ],
+  "files": [
+    "lib",
+    "docs",
+    "bin"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/easy-mock/easy-mock-cli.git"
