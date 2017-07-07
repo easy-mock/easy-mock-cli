@@ -1,6 +1,6 @@
 {
   "name": "easy-mock-cli",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "main": "index.js",
   "license": "MIT",
   "author": "Chuangker",
@@ -9,6 +9,9 @@
     "easymock": "./bin/easymock",
     "easymock-init": "./bin/easymock-init",
     "easymock-list": "./bin/easymock-list"
+  },
+  "scripts": {
+    "docs": "serve -p 8080 ./docs"
   },
   "keywords": [
     "easy-mock",
@@ -34,6 +37,7 @@
     "ora": "^1.2.0",
     "rimraf": "^2.6.1",
     "semver": "^5.3.0",
+    "serve": "^6.0.1",
     "tildify": "^1.2.0",
     "user-home": "^2.0.0"
   },

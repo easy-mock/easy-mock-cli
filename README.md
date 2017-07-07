@@ -1,11 +1,16 @@
 Easy Mock CLI
 ---
-如果你正在使用 [Easy Mock](https://www.easy-mock.com)，那么借助于该工具可以为我们自动生成 `API-JS`。
+[![npm version](https://img.shields.io/npm/v/easy-mock-cli.svg?style=flat-square)](https://www.npmjs.com/package/easy-mock-cli)
 
-简单来讲就是我们再也不需要手动创建 `api.js` 这类的文件了。
+Easy Mock CLI 是一个基于 [Easy Mock](https://www.easy-mock.com) 快速生成 api.js 的命令行工具。
 
-Installing
----
+如果你正在使用 Easy Mock 伪造接口数据，那一定不要错过 Easy Mock CLI。
+
+## Links
+
+- [Documentation](https://easy-mock.github.io/easy-mock-cli/)
+
+## Installation
 
 ```bash
 npm install -g easy-mock-cli
@@ -13,7 +18,14 @@ npm install -g easy-mock-cli
 npm install --save easy-mock-cli
 ```
 
-Documentation
----
+## Contributing
 
-[帮助文档](https://easy-mock.github.io/easy-mock-cli/)
+- Fork it!
+- Create your feature branch: git checkout -b my-new-feature
+- Commit your changes: git commit -am 'Add some feature'
+- Push to the branch: git push origin my-new-feature
+- Submit a pull request
+
+## License
+
+MIT

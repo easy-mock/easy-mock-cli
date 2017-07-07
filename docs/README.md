@@ -1,32 +1,40 @@
 ## 简介
 
-如果你正在使用 [Easy Mock](https://www.easy-mock.com)，那么借助于该工具可以为我们自动生成 `API-JS`。
+> Easy Mock 是一个可视化，并且能快速生成模拟数据的服务。以项目管理的方式组织 Mock List，能帮助我们更好的管理 Mock 数据，不怕丢失。
 
-简单来讲就是我们再也不需要手动创建 `api.js` 这类的文件了。
+Easy Mock CLI 是一个基于 [Easy Mock](https://www.easy-mock.com) 快速生成 `api.js` 的命令行工具。
 
-例如：
+如果你正在使用 Easy Mock 伪造接口数据，那一定不要错过 `Easy Mock CLI`。
+
+例如下面的代码：
 
 ```js
 // api.js
-import instance from './instance';
-function user(opts) {
-  return instance({
-    method: 'get',
-    url: '/user',
-    opts: opts
-  });
-}
+import axios from 'axios';
 
-export {
-  user
+const apiList = {
+  getUser(id) {
+    return axios({
+      method: 'get',
+      url: '/user/' + id
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 };
+
+export default apiList;
 ```
 
-像这样的文件我们只需通过 `easy-mock-cli` 就能生成，非常高效。
+像这样的接口定义文件我们完全不需要手写，因为通过 `Easy Mock CLI` 就能生成，非常高效。
 
 ## 快速开始
 
-1.安装。
+### 安装 CLI
 
 ```bash
 npm install -g easy-mock-cli
@@ -34,50 +42,58 @@ npm install -g easy-mock-cli
 npm install --save easy-mock-cli
 ```
 
-2.在项目下创建配置文件。
+> 你可以选择全局安装。如果是协作项目，建议安装在项目内方便他人使用。
+
+### 创建配置文件
+
+> 在你的项目根目录下创建一份名为 `.easy-mock.js` 的配置文件。
 
 ```js
 // .easy-mock.js
 module.exports = {
-  output: "api",
-  template: "axios",
+  output: "api", // 产出到项目下的 api 目录，不用手动创建
+  template: "axios", // 基于 easy-mock-templates 提供的 axios 模板
   projects: [
     {
-      id: "easy mock 项目 id",
-      name: "demo"
+      id: "你要创建的 Easy Mock 项目的 id", // 例：58fef6ac5e43ae5dbea5eb53
+      name: "demo" // 该项目下的 API 生成之后会被放到 api/demo 目录下
     }
   ]
 };
 ```
 
-3.生成 API-JS。
+### 生成 API 文件
+
+在项目根目录下，执行如下命令。Easy Mock CLI 会读取指定目录（默认为当前目录）下的 `.easy-mock.js` 配置文件并完成创建工作。
 
 ```bash
 easymock init .
 ```
 
-`easy-mock-cli` 会读取指定目录（默认为当前目录）下的 `.easy-mock.js` 配置文件并完成创建工作。
+> ***注:*** 如果 CLI 安装在项目下，会提示找不到命令。那么可以将该命令添加到 `package.json` 的 `scripts` 中。
 
 ## 配置文件
 
-`easy-mock-cli` 的配置文件为 `.easy-mock.js`，它包含如下配置项。
+> 如果你通过上面的方式顺利的生成了 API，那么后面要讲的主要是介绍 Easy Mock CLI 的两大核心，`配置文件` 和 `API 模板`。
+
+Easy Mock CLI 的配置文件为 `.easy-mock.js`，它包含如下完整的配置项。
 
 ### 配置项
 
 属性名 | 描述 | 可空 | 类型 | 默认值
 ------|-----|---------|-----|------
-host | 指定一个源 | true | String | https://www.easy-mock.com
-output | 产出目录 | true | String | easy-mock-api
-template | 模板 | false | String |
+host | 指定一个源，将在该源下获取接口数据 | true | String | https://www.easy-mock.com
+output | 生成 API 的基础目录（基于项目目录，无需手动创建） | true | String | easy-mock-api
+template | 指定一个 API 模板 | false | String |
 projects | 项目列表 | false | Array |
-projects.id | 项目 id | false | String |
-projects.name | 项目名，可以是任意名字 | false | String |
-projects.white | 白名单，只生成出现在白名单中的接口 | true | Array |
-projects.black | 黑名单，不生成出现在黑名单中的接口 | true | Array |
+projects[id] | Easy Mock 项目 id | false | String |
+projects[name] | 项目名（开心就好，尽量简单，不用中文） | false | String |
+projects[white] | 白名单（只生成白名单中的接口） | true | Array[String] |
+projects[black] | 黑名单（不生成黑名单中的接口） | true | Array[String] |
 
-### template
+### 模板说明
 
-我们提供了一些官方的模板，可以在 [easy-mock-templates](https://github.com/easy-mock-templates) 查看。
+> 我们提供了一些官方的模板，可以在 [easy-mock-templates](https://github.com/easy-mock-templates) 查看。如果无法满足你的业务场景，可以自己创建模板，当然也欢迎参与贡献。
 
 `template` 支持从 3 个地方读取模板。
 
@@ -90,7 +106,9 @@ module.exports = {
 };
 ```
 
-### 例子
+### 配置项例子
+
+下面是一份完整的配置项例子。
 
 ```js
 // .easy-mock.js
@@ -100,16 +118,16 @@ module.exports = {
   projects: [
     {
       id: "58fef6ac5e43ae5dbea5eb52",
-      name: "user",
+      name: "user", // 生成到 api/user 目录下。
       black: [
-        "/query"
+        "/query" // 排除 query 接口
       ]
     },
     {
       id: "58fef6ac5e43ae5dbea5eb51",
-      name: "top",
+      name: "top", // 生成到 api/top 目录下。
       white: [
-        "/proxy"
+        "/proxy" // 只生成 proxy 接口
       ]
     }
   ]
@@ -118,13 +136,15 @@ module.exports = {
 
 ## 自定义模板
 
-我们可以自定义模板，以满足不同的需求。
+除了使用 easy-mock-templates 提供的模板外，我们还可以自定义模板，以满足不同的需求。
 
-### 例子
+### 模板示例
 
-可以参考官方提供的一个基于 [axios](https://github.com/easy-mock-templates/axios) 创建 api 的模板例子，学习如何创建自定义模板。
+如果你需要开发一个自己的 API 模板，可以参考这个基于 [axios](https://github.com/easy-mock-templates/axios) 实现的例子，更快的学习如何创建模板。
 
-### 目录规范
+### 模板基础目录
+
+请按照下面的目录结构创建一个模板。
 
 ```
 .
@@ -136,45 +156,40 @@ module.exports = {
     └── init
 ```
 
+### 基础目录说明
+
 #### helper
 
-`easy-mock-cli` 默认会获取该目录下的 `index.js`，并将其注入到 `$$` 对象中。
+Easy Mock CLI 默认会获取该目录下的 `index.js`，并将其注入到 `$$` 对象中。
 
 这样我们便可以自定义方法，并在模板中使用。
 
 #### template
 
-模板目录，该目录下包含 3 个目录。分别是 `common` `init` `cover`。
+> 模板语法参考 [lodash.template](https://lodash.com/docs/4.17.4#template)
 
-模板文件语法参考 [lodash.template](https://lodash.com/docs/4.17.4#template)
+template 为模板目录，下面包含了如下目录。
 
-##### common
+目录名 | 产出目录 | 规则
+------|-----|---------
+common | ${output} | 只创建一次
+init | ${output}/${project.name} | 只创建一次
+cover | ${output}/${project.name} | 每次覆盖式创建
 
-该目录下的所有文件会经过编译产出到 `配置项-output` 下。
-
-**更新规则：**文件不存在时创建（如果存在就不会再次创建）。
-
-##### init
-
-该目录下的所有文件会经过编译产出到 `项目目录` 下。
-
-**更新规则：**文件不存在时创建（如果存在就不会再次创建）。
-
-##### cover
-
-该目录下的所有文件会经过编译产出到 `项目目录` 下。
-
-**更新规则：**每次执行 `easymock init` 都会创建（已经存在的文件会被覆盖）。
-
-### 模板数据源
+### 接口数据源
 
 在模板文件中，我们可以获取到如下的数据源。
 
-#### data
+对象 | 说明
+------|-----
+data | 接口数据
+config | 配置参数
+_ | [lodash](https://lodash.com)
+$$ | 帮助函数
 
-接口数据，它包含了该项目下所有的接口信息。
+#### data 数据结构
 
-**注意：**在 `template/common` 目录下的模板文件中无法获取到该对象。
+> **注意：**在 `template/common` 目录下的模板文件中无法获取到 `data` 对象。
 
 ```json
 {
@@ -196,18 +211,6 @@ module.exports = {
   }]
 }
 ```
-
-#### config
-
-参考 `配置项`。
-
-#### _
-
-参考 [lodash](https://lodash.com)。
-
-#### $$
-
-帮助函数。
 
 ### 帮助函数
 
@@ -237,11 +240,11 @@ export {<% _.forEach(data.mocks, function(mock, i){ %>
 };
 ```
 
-**注意：**帮助函数中不要引用第三方模块，因为在模板下载后并不会执行 `npm install`
+> **注意：**你可以 require Node.js 原生模块，但是不要试图引入第三方模块（模板被下载后不会安装你的模块）。
 
-#### 内置
+#### 内置函数
 ##### relative
 
-获取相对于 `配置项-output` 目录下的文件地址。
+获取相对于 `${output}` 目录下的文件地址。
 
-**注意：**在 `template/common` 目录下的模板文件中无法获取到该方法。
+> **注意：**在 `template/common` 目录下的模板文件中无法获取到该方法。
