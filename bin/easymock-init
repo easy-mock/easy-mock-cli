@@ -10,6 +10,7 @@ var home = require('user-home')
 var rimraf = require('rimraf')
 var tildify = require('tildify')
 var download = require('download-git-repo')
+var cosmiconfig = require('cosmiconfig')
 
 var logger = require('../lib/logger')
 var generate = require('../lib/generate')
@@ -28,15 +29,26 @@ program
 run()
 
 function run () {
+  var explorer = cosmiconfig('easymock', {
+    searchPlaces: [
+      'package.json',
+      '.easymockrc',
+      '.easymockrc.json',
+      '.easymockrc.yaml',
+      '.easymockrc.yml',
+      '.easymockrc.js',
+      'easymock.config.js',
+      '.easy-mock.js'
+    ]
+  })
+  var search = explorer.searchSync()
   var projectPath = program.args[0] ? path.resolve(process.cwd(), program.args[0]) : process.cwd()
-  var configPath = path.join(projectPath, '.easy-mock.js')
 
-  if (!fs.existsSync(configPath)) {
+  if (!search) {
     logger.fatal('找不到 ".easy-mock.js" 配置文件.')
   }
 
-  var config = require(configPath)
-
+  var config = search.config
   var template = config.template || 'axios'
   var hasSlash = template.indexOf('/') > -1
   var tmp = path.join(home, '.easy-mock-templates', template.replace(/\//g, '-'))

@@ -2,7 +2,7 @@
 
 > Easy Mock 是一个可视化，并且能快速生成模拟数据的服务。以项目管理的方式组织 Mock List，能帮助我们更好的管理 Mock 数据，不怕丢失。
 
-Easy Mock CLI 是一个基于 [Easy Mock](https://www.easy-mock.com) 快速生成 `api.js` 的命令行工具。
+Easy Mock CLI 是一个基于 [Easy Mock](https://www.easy-mock.com) 快速生成 `API` 调用文件的命令行工具。
 
 如果你正在使用 Easy Mock 伪造接口数据，那一定不要错过 `Easy Mock CLI`。
 
@@ -36,47 +36,63 @@ export default apiList;
 
 ### 安装 CLI
 
+> 使用 NPM 需要提前安装好 [Node.js](https://nodejs.org/en/)
+
 ```bash
 npm install -g easy-mock-cli
-# or
-npm install --save easy-mock-cli
 ```
-
-> 你可以选择全局安装。如果是协作项目，建议安装在项目内方便他人使用。
 
 ### 创建配置文件
 
-> 在你的项目根目录下创建一份名为 `.easy-mock.js` 的配置文件。
+在你的项目根目录下创建一份名为 `.easymockrc` 的配置文件。
 
-```js
-// .easy-mock.js
-module.exports = {
-  output: "api", // 产出到项目下的 api 目录，不用手动创建
-  template: "axios", // 基于 easy-mock-templates 提供的 axios 模板
-  projects: [
+```json
+{
+  "output": "api",
+  "template": "axios",
+  "projects": [
     {
-      id: "你要创建的 Easy Mock 项目的 id", // 例：58fef6ac5e43ae5dbea5eb53
-      name: "demo" // 该项目下的 API 生成之后会被放到 api/demo 目录下
+      "id": "你要创建的 Easy Mock 项目的 id",
+      "name": "demo"
     }
   ]
 };
 ```
 
+以上配置参数的详细介绍在[这里](###配置项)可以找到。
+
 ### 生成 API 文件
 
-在项目根目录下，执行如下命令。Easy Mock CLI 会读取指定目录（默认为当前目录）下的 `.easy-mock.js` 配置文件并完成创建工作。
+在项目根目录下，执行如下命令将自动生成 API 文件。
 
 ```bash
 easymock init .
 ```
 
-> ***注:*** 如果 CLI 安装在项目下，会提示找不到命令。那么可以将该命令添加到 `package.json` 的 `scripts` 中。
-
 ## 配置文件
 
-> 如果你通过上面的方式顺利的生成了 API，那么后面要讲的主要是介绍 Easy Mock CLI 的两大核心，`配置文件` 和 `API 模板`。
+> 如果你通过上面的方式顺利的生成了 API，那么后面主要是介绍 Easy Mock CLI 的两大核心，`配置文件` 和 `API 模板`。
 
-Easy Mock CLI 的配置文件为 `.easy-mock.js`，它包含如下完整的配置项。
+### 文件格式
+
+支持以下文件格式：
+
+- json
+- yml
+- ymal
+- js
+
+例如：
+
+```
+.easymockrc
+.easymockrc.json
+.easymockrc.yaml
+.easymockrc.yml
+.easymockrc.js
+.easy-mock.js
+easymock.config.js
+```
 
 ### 配置项
 
@@ -111,7 +127,7 @@ module.exports = {
 下面是一份完整的配置项例子。
 
 ```js
-// .easy-mock.js
+// .easymockrc.js
 module.exports = {
   output: "api",
   template: "axios",
