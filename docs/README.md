@@ -111,13 +111,14 @@ projects[black] | 黑名单（不生成黑名单中的接口） | true | Array[S
 
 > 我们提供了一些官方的模板，可以在 [easy-mock-templates](https://github.com/easy-mock-templates) 查看。如果无法满足你的业务场景，可以自己创建模板，当然也欢迎参与贡献。
 
-`template` 支持从 3 个地方读取模板。
+`template` 支持从多个地方读取模板。
 
 ```js
 module.exports = {
   template: "axios", // 指定官方的 axios 模板
   template: "../../", // 指定本地的模板
   template: "owner/name", // 指定 github 上的模板
+  template: "...", // 更多，如：内网 GitLab 等，配置方式见：https://github.com/flipxfx/download-git-repo
   ...
 };
 ```
