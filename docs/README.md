@@ -1,6 +1,6 @@
 ## 简介
 
-> Easy Mock 是一个可视化，并且能快速生成模拟数据的服务。以项目管理的方式组织 Mock List，能帮助我们更好的管理 Mock 数据，不怕丢失。
+> Easy Mock 是一个可视化，并且能快速生成模拟数据的服务。以项目管理的方式组织 Mock List，能帮助我们更好的管理 Mock 数据，不怕丢失。
 
 Easy Mock CLI 是一个基于 [Easy Mock](https://www.easy-mock.com) 快速生成 `API` 调用文件的命令行工具。
 
@@ -30,7 +30,7 @@ const apiList = {
 export default apiList;
 ```
 
-像这样的接口定义文件我们完全不需要手写，因为通过 `Easy Mock CLI` 就能生成，非常高效。
+像这样的接口定义文件我们完全不需要手写，因为通过 `Easy Mock CLI` 就能生成，非常高效。
 
 ## 快速开始
 

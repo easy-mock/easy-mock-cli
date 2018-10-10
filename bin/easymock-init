@@ -8,6 +8,7 @@ var chalk = require('chalk')
 var ora = require('ora')
 var home = require('user-home')
 var rimraf = require('rimraf')
+var crypto = require('crypto')
 var tildify = require('tildify')
 var download = require('download-git-repo')
 var cosmiconfig = require('cosmiconfig')
@@ -51,7 +52,8 @@ function run () {
   var config = search.config
   var template = config.template || 'axios'
   var hasSlash = template.indexOf('/') > -1
-  var tmp = path.join(home, '.easy-mock-templates', template.replace(/\//g, '-'))
+  var hash = crypto.createHash('sha256').update(template).digest('hex')
+  var tmp = path.join(home, '.easy-mock-templates', hash)
 
   if (program.offline) {
     logger.log('> 使用缓存模板 %s', chalk.yellow(tildify(tmp)))
