@@ -56,7 +56,7 @@ npm install -g easy-mock-cli
       "name": "demo"
     }
   ]
-};
+}
 ```
 
 以上配置参数的详细介绍在[这里](###配置项)可以找到。
