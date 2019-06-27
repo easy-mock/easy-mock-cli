@@ -11,7 +11,8 @@
     "easymock-list": "./bin/easymock-list"
   },
   "scripts": {
-    "docs": "serve -p 8080 ./docs"
+    "docs": "serve -p 8080 ./docs",
+    "lint": "eslint ./bin/** ./lib/**"
   },
   "keywords": [
     "easy-mock",
@@ -43,12 +44,12 @@
     "user-home": "^2.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
-    "eslint": "^3.19.0",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-node": "^4.2.2",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0"
   }
 }
